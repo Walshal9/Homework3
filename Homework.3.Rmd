@@ -1,0 +1,139 @@
+---
+title: "Homework.3"
+author: "Walsh"
+date: "04/02/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+##Part1-ANova
+#1.
+```{r}
+setwd("C:/Users/Alexandre/Desktop/Master/Advance Biostatistics")
+AcidRain = read.csv('Killarney_HW3.csv')
+```
+#2.
+```{r}
+boxplot(AcidRain$Diversity~AcidRain$status)
+ 
+```
+## Yes it looks like there is a diffrence in diversity between lake types
+
+#3.
+```{r}
+my.fit=aov(AcidRain$Diversity~AcidRain$status)
+summary(my.fit)
+```
+#4. Null Hypothesis: There is no diffrence in varience between the groups or lakes in plankton diversity. Alternate hypothesis: There is a diffrence in varience between the groups or lakes in plankton diversity.
+
+#5. The observed p-value is 5.43e-06, which is smaller than 0.05.
+
+#6. Since the p-value is smaller than 0.05, we reject the null hypothesis and there is a diffrence in variance in plakton diversity among lakes.
+
+#7. 
+```{r}
+TukeyHSD(aov(my.fit))
+```
+#8. Based on the follow-up test, Neutral-Acidic and Recovered-Acidic are significantly diffrent from one another.
+
+#9. 
+```{r}
+shapiro.test(AcidRain$Diversity)
+leveneTest(AcidRain$Diversity,AcidRain$status)
+```
+##For the Shapiro-Wilk's our is smaller than 0.05 which means that it is not normally distributed. For the levenetest, the p-value of 0.3773 was greater than 0.05, so we failed to reject the null hypothesis. In other words, our data does meet the assumption of homogeneity of variances. The Killarney data set does not met all assumptions required for an ANOVA test.
+
+#10.
+```{r}
+Eso = read.csv(file.choose())
+```
+```{r}
+Eso
+```
+##a.
+```{r}
+my.fit=aov(Eso$ncases~Eso$Alcohol*Eso$Tobacco)
+summary(my.fit)
+```
+##b.Since p>0.05, we can conclude that alcohol (p=0.110), tobacco(p=0.146), as well as the interactions (p=0.892) had no influence on cancer cases and there was no interaction betweem alcohol and tobacco.
+
+#11.
+##a-b.
+```{r}
+my.fit=aov(Eso$ncases~Eso$Age*Eso$Tobacco)
+summary(my.fit)
+TukeyHSD(aov(my.fit))
+```
+##c Since p<0.05, we can conclude that age (p=1.2e-08) and tobacco(p=0.00763) had an influence on cancer cases. Although, the interactions between age and tobacco (p=0.18215) had no influence on cancer cases. The Tukey test shows that some comparisons between ages are significant and some comparisons between alcohol are significant.
+
+
+#12.
+#a.-b.
+```{r}
+my.fit=aov(Eso$ncases~Eso$Age*Eso$Alcohol)
+summary(my.fit)
+interaction.plot(Eso$Age,Eso$Alcohol,Eso$ncases)
+```
+#c. Since p<0.05, we can conclude that alcohol (p=0.00486), age (2.89e-09), as well as the interactions (p=0.03633) had an influence on cancer cases and there is an interaction between age and alcohol. The plot seems to display that there is an interaction between the age of 65-74 and alcohol consumption of 40-79g/day with 8 cases of cancer.
+
+#PART 2
+#13.
+```{r}
+#a.
+x <- mtcars$wt
+y <- mtcars$mpg
+plot(x, y, main = "Cars", xlab = "Weight", ylab = "mileage", pch = 19, frame = FALSE)
+## There seems to be a dependence on fuel mileage and the weight of the car.
+abline(lm(y ~ x, data = mtcars), col = "blue")
+glm(mtcars$mpg~mtcars$wt)
+my.fit=glm(mtcars$mpg~mtcars$wt)
+formula(my.fit)
+summary.lm(my.fit)
+```
+#c. y = 37.285 - 5.344x
+#d. Since p(1.29e-10) <0.05 gas mileage is significantly related to car weight.
+
+#14
+```{r}
+x <- mtcars$hp
+y <- mtcars$qsec
+plot(x, y, main = "Cars", xlab = "Horsepower", ylab = "Quarter Mile (Sec)", pch = 19, frame = FALSE)
+## There seems to be a dependence on horsepower and the quarter mile time.
+abline(lm(y ~ x, data = mtcars), col = "blue")
+glm(mtcars$qsec~mtcars$hp)
+my.fit=glm(mtcars$qsec~mtcars$hp)
+formula(my.fit)
+summary.lm(my.fit)
+```
+#c. Y = 20.55635 - 0.01846x
+#d.
+```{r}
+y = 20.55635-(0.01846*300)
+y
+```
+#The quater mile time for a car with 300hp would be 15.02 seconds
+#e. Since p(5.77e-06) <0.05 horsepower is significantly related to quarter mile time.
+#f. 
+```{r}
+gvlma(lm(my.fit))
+#This data did not meet the kurtosis assumption.
+```
+#15.
+```{r}
+#a.
+data("iris")
+head(iris)
+#b.
+plot(Sepal.Length~Sepal.Width, data=iris)
+glm(Sepal.Length~Sepal.Width, data=iris)
+#c
+my.fit=glm(Sepal.Length~Sepal.Width, data=iris)
+formula(my.fit)
+summary.lm(my.fit)
+sqrt(0.01382)
+#correlation coefficient of r = 0.118
+#d. The p value is 0.1519, the correlation is not significant
+```
+
+
